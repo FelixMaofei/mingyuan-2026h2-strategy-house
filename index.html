@@ -1,0 +1,1589 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>明源云 2026 H2 战略屋管理系统 v1</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --navy: #18334f;
+      --navy-2: #244866;
+      --wine: #7a1734;
+      --gold: #b9872d;
+      --green: #2f7651;
+      --blue: #2f638d;
+      --red: #a3463d;
+      --ink: #20262c;
+      --muted: #65707b;
+      --paper: #f3f5f6;
+      --surface: #fffefb;
+      --line: #d7dde2;
+      --soft: #eef2f5;
+      --warm: #f7efe4;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.46;
+      letter-spacing: 0;
+      background:
+        linear-gradient(90deg, rgba(24, 51, 79, .05) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(24, 51, 79, .05) 1px, transparent 1px),
+        var(--paper);
+      background-size: 28px 28px;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--navy);
+      border-radius: 7px;
+      background: var(--navy);
+      color: white;
+      padding: 8px 11px;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: white;
+      color: var(--navy);
+    }
+
+    button.danger {
+      border-color: rgba(163, 70, 61, .38);
+      background: white;
+      color: var(--red);
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(185, 135, 45, .42);
+      outline-offset: 2px;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: start;
+      padding: 18px 0 16px;
+      border-bottom: 4px solid var(--navy);
+    }
+
+    .eyebrow {
+      color: var(--wine);
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 8px 0 8px;
+      color: var(--navy);
+      font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+      font-size: clamp(30px, 4vw, 54px);
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 980px;
+      margin: 0;
+      color: #3a4148;
+      font-size: 16px;
+      font-weight: 720;
+    }
+
+    .toolbar {
+      min-width: 430px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 0;
+      background: rgba(243, 245, 246, .94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(215, 221, 226, .8);
+    }
+
+    .nav a {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: white;
+      color: var(--navy);
+      padding: 7px 11px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .system-note {
+      margin: 16px 0;
+      border-left: 6px solid var(--gold);
+      background: rgba(255, 254, 251, .92);
+      padding: 13px 16px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 720;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 12px;
+      min-height: 96px;
+    }
+
+    .metric .num {
+      color: var(--navy);
+      font-family: "Songti SC", "STSong", serif;
+      font-size: 32px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .metric .label {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .metric .target {
+      margin-top: 4px;
+      color: var(--wine);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .section {
+      margin: 18px 0;
+      border-top: 3px solid var(--navy);
+      background: rgba(255, 254, 251, .92);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 15px 0 10px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 23px;
+      line-height: 1.15;
+      font-weight: 950;
+    }
+
+    .section-head .note {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+      text-align: right;
+    }
+
+    .section-body {
+      padding: 0 0 16px;
+    }
+
+    .value-chain {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .chain-step,
+    .goal,
+    .pillar,
+    .base,
+    .principle {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 12px;
+    }
+
+    .chain-step {
+      min-height: 118px;
+      border-top: 4px solid var(--gold);
+    }
+
+    .chain-step .idx,
+    .goal .idx,
+    .pillar .role,
+    .base .idx,
+    .principle .idx {
+      color: var(--wine);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .chain-step h3,
+    .goal h3,
+    .pillar h3,
+    .base h3,
+    .principle h3 {
+      margin: 6px 0 6px;
+      color: var(--navy);
+      font-size: 15px;
+      line-height: 1.25;
+      font-weight: 950;
+    }
+
+    .chain-step p,
+    .goal p,
+    .pillar p,
+    .base p,
+    .principle p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .house-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .roof,
+    .pillars,
+    .base-grid,
+    .principles {
+      display: grid;
+      gap: 10px;
+    }
+
+    .roof {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+    }
+
+    .goal {
+      min-height: 132px;
+      border-top: 4px solid var(--wine);
+    }
+
+    .pillars {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .pillar {
+      min-height: 175px;
+      border-top: 4px solid var(--blue);
+    }
+
+    .base-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .base {
+      min-height: 110px;
+      border-left: 4px solid var(--green);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    th,
+    td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 8px 9px;
+      vertical-align: top;
+      font-size: 12.5px;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      background: #edf1f4;
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 950;
+      text-align: left;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+    td:last-child, th:last-child { border-right: 0; }
+
+    .owner {
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 2px 7px;
+      min-width: 48px;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .status.high,
+    .status.blocked { background: rgba(163, 70, 61, .12); color: var(--red); }
+    .status.mid,
+    .status.doing { background: rgba(47, 99, 141, .12); color: var(--blue); }
+    .status.low,
+    .status.done { background: rgba(47, 118, 81, .12); color: var(--green); }
+    .status.wait { background: rgba(185, 135, 45, .16); color: #846016; }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(420px, 1.05fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: white;
+      color: var(--ink);
+      padding: 8px 9px;
+      font-size: 13px;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .chart {
+      height: 170px;
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 14px 10px 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, transparent calc(50% - 1px), rgba(24, 51, 79, .11) 50%, transparent calc(50% + 1px)),
+        white;
+      position: relative;
+    }
+
+    .bar-wrap {
+      min-width: 44px;
+      flex: 1 0 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: end;
+      height: 100%;
+      gap: 4px;
+      position: relative;
+    }
+
+    .bar {
+      width: 72%;
+      min-height: 3px;
+      max-height: 124px;
+      background: var(--blue);
+      border-radius: 5px 5px 0 0;
+    }
+
+    .bar.hit { background: var(--green); }
+
+    .bar-num {
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .bar-label {
+      position: absolute;
+      bottom: -20px;
+      color: var(--muted);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .empty {
+      width: 100%;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #fbfcfd;
+      padding: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 760;
+      text-align: center;
+    }
+
+    .commitment-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .commitment {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) 120px 84px;
+      gap: 8px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      padding: 9px;
+    }
+
+    .commitment input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--green);
+    }
+
+    .commitment .title {
+      font-weight: 900;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .commitment .meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .links {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .links a {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      color: var(--navy);
+      padding: 10px 12px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .links a:hover { border-color: var(--gold); }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      border-radius: 8px;
+      background: var(--navy);
+      color: white;
+      padding: 10px 12px;
+      box-shadow: 0 18px 48px rgba(20, 31, 42, .18);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .footer {
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 1180px) {
+      .topbar,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        min-width: 0;
+        justify-content: flex-start;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .value-chain,
+      .pillars,
+      .base-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .roof,
+      .links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page { padding: 16px; }
+      .metrics,
+      .value-chain,
+      .roof,
+      .pillars,
+      .base-grid,
+      .principles,
+      .input-grid,
+      .links {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head .note {
+        text-align: left;
+        margin-top: 6px;
+      }
+
+      .table-scroll {
+        overflow-x: auto;
+      }
+
+      table { min-width: 860px; }
+
+      .commitment {
+        grid-template-columns: 28px minmax(0, 1fr);
+      }
+    }
+
+    @media print {
+      @page { size: A4 landscape; margin: 8mm; }
+      body { background: white; }
+      .page {
+        max-width: none;
+        padding: 0;
+      }
+      .nav,
+      .toolbar,
+      .form-actions,
+      .toast,
+      .footer,
+      .no-print {
+        display: none;
+      }
+      .topbar { padding-top: 0; }
+      h1 { font-size: 28px; }
+      .subtitle,
+      .eyebrow { font-size: 10px; }
+      .system-note { margin: 8px 0; padding: 8px; font-size: 9px; }
+      .metrics {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 5px;
+        margin: 8px 0;
+      }
+      .metric { min-height: 0; padding: 7px; }
+      .metric .num { font-size: 19px; }
+      .metric .label,
+      .metric .target { font-size: 8px; }
+      .section {
+        margin: 8px 0;
+        break-inside: avoid;
+      }
+      .section-head {
+        padding: 6px 0 5px;
+      }
+      .section-head h2 { font-size: 14px; }
+      .section-head .note { font-size: 8px; }
+      .chain-step,
+      .goal,
+      .pillar,
+      .base,
+      .principle { min-height: 0; padding: 6px; }
+      .chain-step h3,
+      .goal h3,
+      .pillar h3,
+      .base h3,
+      .principle h3 { font-size: 9.5px; margin: 3px 0; }
+      .chain-step p,
+      .goal p,
+      .pillar p,
+      .base p,
+      .principle p { font-size: 7.8px; }
+      th,
+      td { padding: 3px 4px; font-size: 7.8px; line-height: 1.22; }
+      th { font-size: 7.5px; }
+      .chart { height: 90px; padding-bottom: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">Mingyuan Yun Toastmasters Club · Operating System v1</div>
+        <h1>明源云 2026 H2 战略屋管理系统</h1>
+        <p class="subtitle">基于 2026-07-04 官员会纪要与嘉骏届管理表逻辑搭建：用战略屋看方向，用仪表盘看结果，用关键动作看过程，用官员成长看人。</p>
+      </div>
+      <div class="toolbar">
+        <button type="button" id="copyWeekly">复制周报</button>
+        <button type="button" id="copyTasks" class="secondary">复制待办 TSV</button>
+        <button type="button" id="copyRecords" class="secondary">复制数据 TSV</button>
+        <button type="button" id="exportState" class="secondary">导出本地数据</button>
+        <button type="button" onclick="window.print()" class="secondary">打印</button>
+      </div>
+    </header>
+
+    <nav class="nav" aria-label="页面导航">
+      <a href="#model">管理模型</a>
+      <a href="#house">战略屋</a>
+      <a href="#officers">官员目标</a>
+      <a href="#actions">关键动作</a>
+      <a href="#data">运营数据</a>
+      <a href="#projects">项目问题</a>
+      <a href="#ritual">官员会节奏</a>
+    </nav>
+
+    <div class="system-note">
+      这不是展示页，而是官员会现场打开使用的管理台。它默认追踪一条价值链：嘉宾被吸引 → 例会体验好 → 愿意再来 → 入会 → 有成长路径 → 承担角色 → 产生归属感 → 推荐别人。
+    </div>
+
+    <section class="metrics" aria-label="运营健康度">
+      <div class="metric">
+        <div class="num" id="memberNow">8</div>
+        <div class="label">当前会员</div>
+        <div class="target">目标 25 人</div>
+      </div>
+      <div class="metric">
+        <div class="num">15+</div>
+        <div class="label">活跃会员目标</div>
+        <div class="target">先记录，再定义</div>
+      </div>
+      <div class="metric">
+        <div class="num" id="avgAttendance">0</div>
+        <div class="label">平均参会</div>
+        <div class="target">目标 20 人 / 场</div>
+      </div>
+      <div class="metric">
+        <div class="num" id="guestTotal">0</div>
+        <div class="label">累计嘉宾</div>
+        <div class="target">来源与动机要埋点</div>
+      </div>
+      <div class="metric">
+        <div class="num" id="conversionTotal">0</div>
+        <div class="label">入会转化</div>
+        <div class="target">会后 24 小时承接</div>
+      </div>
+      <div class="metric">
+        <div class="num" id="doneTasks">0/15</div>
+        <div class="label">待办完成</div>
+        <div class="target">本地勾选保存</div>
+      </div>
+    </section>
+
+    <section class="section" id="model">
+      <div class="section-head">
+        <h2>第一性原理：管理会员成长价值链</h2>
+        <div class="note">不是管任务，而是管理价值如何持续发生</div>
+      </div>
+      <div class="section-body">
+        <div class="value-chain">
+          <article class="chain-step">
+            <div class="idx">01</div>
+            <h3>吸引</h3>
+            <p>表达 + AI 的主题让对的人愿意报名；PR 不只做海报，还要知道人从哪里来。</p>
+          </article>
+          <article class="chain-step">
+            <div class="idx">02</div>
+            <h3>体验</h3>
+            <p>例会人数、角色完整、会议经理排班、嘉宾被照顾，决定是否愿意再来。</p>
+          </article>
+          <article class="chain-step">
+            <div class="idx">03</div>
+            <h3>转化</h3>
+            <p>情绪触动 + 24 小时跟进 + 清楚入会价值，把嘉宾变成会员。</p>
+          </article>
+          <article class="chain-step">
+            <div class="idx">04</div>
+            <h3>成长</h3>
+            <p>表达、Pathways、AI 实践、工作坊和角色承担，让会员真的变强。</p>
+          </article>
+          <article class="chain-step">
+            <div class="idx">05</div>
+            <h3>归属</h3>
+            <p>官员、讲师、会员被看见；会员活动和反馈让人想留下。</p>
+          </article>
+          <article class="chain-step">
+            <div class="idx">06</div>
+            <h3>组织能力</h3>
+            <p>每月官员会、财务透明、SOP、交接、问题清单，让组织不靠单点英雄。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="house">
+      <div class="section-head">
+        <h2>战略屋</h2>
+        <div class="note">屋顶是目标，柱子是人，底座是机制</div>
+      </div>
+      <div class="section-body">
+        <div class="house-grid">
+          <div class="roof" aria-label="俱乐部四大目标">
+            <article class="goal">
+              <div class="idx">Goal 01</div>
+              <h3>会员到 25，活跃 15+</h3>
+              <p>目标人群以 OPC、AI 专业人士、有 AI 成长诉求者为优先；价值观合、有热情者也承接。</p>
+            </article>
+            <article class="goal">
+              <div class="idx">Goal 02</div>
+              <h3>真正提升 AI 使用能力</h3>
+              <p>不是听过 AI，而是在备稿、磨稿、点评、工作和个人项目里真的用起来。</p>
+            </article>
+            <article class="goal">
+              <div class="idx">Goal 03</div>
+              <h3>例会平均参会 20 人</h3>
+              <p>每场记录总参会、会员、嘉宾、角色填充、会后反馈，先统计再优化。</p>
+            </article>
+            <article class="goal">
+              <div class="idx">Goal 04</div>
+              <h3>一个自有 AI 长期项目</h3>
+              <p>沉淀“明源云与 AI”或 AI 黑客松沙龙，月度持续，有主题、有案例、有复用材料。</p>
+            </article>
+          </div>
+
+          <div class="pillars" aria-label="官员目标柱">
+            <article class="pillar">
+              <div class="role">会长 · VPM</div>
+              <h3>毛斐</h3>
+              <p>招新到 25；辅助全员达成目标；练领导力。重点是设计节奏，不替所有人做事。</p>
+            </article>
+            <article class="pillar">
+              <div class="role">VPE</div>
+              <h3>黎耀棠</h3>
+              <p>每月至少一次 AI 工作坊 / 培训；半年例会规划；探索 AI 咨询。需要自主权。</p>
+            </article>
+            <article class="pillar">
+              <div class="role">财务官</div>
+              <h3>彭宗一</h3>
+              <p>财务从管好升级到让死钱变活；练带销售目的的说服性表达；启动自媒体。</p>
+            </article>
+            <article class="pillar">
+              <div class="role">事务官</div>
+              <h3>魏真</h3>
+              <p>练逻辑闭环；产出出摊复盘洞察；活动中做宾客观察报告。需要明确 yes / no。</p>
+            </article>
+            <article class="pillar">
+              <div class="role">VPPR</div>
+              <h3>金晶</h3>
+              <p>上手 PR 全流程：AI 海报、推文、取火、头马群发布、渠道埋点。需要提前告知。</p>
+            </article>
+          </div>
+
+          <div class="base-grid" aria-label="运营底座">
+            <article class="base">
+              <div class="idx">Rhythm</div>
+              <h3>每月官员会</h3>
+              <p>固定看进展、卡点、下月动作。追人 > 追事。</p>
+            </article>
+            <article class="base">
+              <div class="idx">Meeting Ops</div>
+              <h3>例会排班</h3>
+              <p>半年规划已完成，缺会议经理排班与 D-3 补位机制。</p>
+            </article>
+            <article class="base">
+              <div class="idx">PR Loop</div>
+              <h3>宣传闭环</h3>
+              <p>取火、推文、群发布、来源埋点、会后承接必须连成一条链。</p>
+            </article>
+            <article class="base">
+              <div class="idx">Finance</div>
+              <h3>小荷包财务</h3>
+              <p>小荷包已搭建；账单已完成，后续看月度流水与凭证。</p>
+            </article>
+            <article class="base">
+              <div class="idx">Learning</div>
+              <h3>复盘学习</h3>
+              <p>每月沉淀一条组织经验：什么有效，什么要停，谁需要支持。</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="officers">
+      <div class="section-head">
+        <h2>官员目标与支持关系</h2>
+        <div class="note">半年目标已经有了；这里追月度动作、支持与状态</div>
+      </div>
+      <div class="section-body table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>官员</th>
+              <th>角色</th>
+              <th>半年目标</th>
+              <th>7 月关键动作</th>
+              <th>8 月关键动作</th>
+              <th>需要支持</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="owner">毛斐</td>
+              <td>会长 · VPM</td>
+              <td>招新到 25；辅助全员达成目标；练领导力。</td>
+              <td>账单已完成；COT 参与；发出目标模板；定 VPM 招新路径；完成官员采访初稿。</td>
+              <td>跑通嘉宾入会 SOP；推动一次“表达 + AI”产品测试；沉淀 AI 长期项目 v0.1。</td>
+              <td>官员按时给月度目标；VPE 给排班；PR 给传播承接。</td>
+              <td><span class="status doing">进行中</span></td>
+            </tr>
+            <tr>
+              <td class="owner">黎耀棠</td>
+              <td>VPE</td>
+              <td>练 AI 工作坊 / 培训；做好半年例会规划；探索 AI 咨询。</td>
+              <td>补齐会议经理排班；明确 7、8 月例会节奏；支持金晶 PR 上手。</td>
+              <td>落地至少一次 AI 工作坊；整理可复用培训材料。</td>
+              <td>保留自主权；毛斐只抓方向和边界。</td>
+              <td><span class="status doing">规划完成</span></td>
+            </tr>
+            <tr>
+              <td class="owner">彭宗一</td>
+              <td>财务官</td>
+              <td>销售表达、个人影响力；财务从管好到让钱流动。</td>
+              <td>接收上半年账单；维护小荷包；协同投票来源埋点；提出销售表达研学路径。</td>
+              <td>做一次月度财务简报；小范围启动 VPM / 销售表达研学。</td>
+              <td>需要被 push 出 0.5 步；需要明确 deadline。</td>
+              <td><span class="status doing">进行中</span></td>
+            </tr>
+            <tr>
+              <td class="owner">魏真</td>
+              <td>事务官</td>
+              <td>练逻辑闭环；出摊复盘 skill；活动宾客观察报告。</td>
+              <td>COT 参与；拆 7、8 月目标；明确需求池小工具是否认领。</td>
+              <td>做一次活动 / 例会宾客观察报告；沉淀出摊复盘洞察。</td>
+              <td>少开放问题，多给 yes / no；提醒定目标，不要催太硬。</td>
+              <td><span class="status wait">待拆月度</span></td>
+            </tr>
+            <tr>
+              <td class="owner">金晶</td>
+              <td>VPPR</td>
+              <td>上手 PR 全流程；提升逻辑、销售、英语。</td>
+              <td>PR 学习 80%；进可发广告头马群；取火稳定发；投票问卷加来源埋点。</td>
+              <td>独立跑通一次 PR 闭环：海报、推文、渠道、复盘。</td>
+              <td>流程文档、海报提示词、有人审推文、提前告知。</td>
+              <td><span class="status doing">80%</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="actions">
+      <div class="section-head">
+        <h2>关键动作矩阵</h2>
+        <div class="note">关键动作是领先指标，任务是一次性动作</div>
+      </div>
+      <div class="section-body split">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>目标</th>
+                <th>结果指标</th>
+                <th>关键动作</th>
+                <th>责任人</th>
+                <th>节奏</th>
+                <th>当前状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>会员到 25</strong></td>
+                <td>当前会员、潜在会员池、二次参会、入会转化</td>
+                <td>每场会后 24 小时内私聊嘉宾；每周刷新潜在会员池；明确“不要的人”。</td>
+                <td class="owner">毛斐</td>
+                <td>每场会后 / 每周</td>
+                <td><span class="status wait">待建 SOP</span></td>
+              </tr>
+              <tr>
+                <td><strong>例会平均 20 人</strong></td>
+                <td>总参会、会员参会、嘉宾参会、角色填充</td>
+                <td>D-7 发布主题与角色；D-3 参会确认；D-1 补位；D+1 数据复盘。</td>
+                <td class="owner">黎耀棠</td>
+                <td>每场例会</td>
+                <td><span class="status wait">缺排班</span></td>
+              </tr>
+              <tr>
+                <td><strong>AI 真落地</strong></td>
+                <td>AI 环节次数、案例数、提示词资产、会员反馈</td>
+                <td>每月至少一次 AI 实践环节；会后沉淀提示词 / 案例；收集真实使用场景。</td>
+                <td class="owner">黎耀棠、毛斐</td>
+                <td>每月</td>
+                <td><span class="status doing">进行中</span></td>
+              </tr>
+              <tr>
+                <td><strong>PR 闭环</strong></td>
+                <td>来源渠道、报名动机、取火发布、推文发布</td>
+                <td>报名问卷加来源；取火稳定发；推文同时宣传活动、官员、目标。</td>
+                <td class="owner">金晶、彭宗一</td>
+                <td>每期</td>
+                <td><span class="status doing">80%</span></td>
+              </tr>
+              <tr>
+                <td><strong>官员目标闭环</strong></td>
+                <td>目标提交率、卡点、下月动作、完成状态</td>
+                <td>2026-07-15 前所有官员拆 7、8 月目标；每月官员会公开更新。</td>
+                <td class="owner">全体官员</td>
+                <td>每月</td>
+                <td><span class="status high">高优先</span></td>
+              </tr>
+              <tr>
+                <td><strong>被看见与归属</strong></td>
+                <td>官员采访、讲师反馈、会员高光、推文素材</td>
+                <td>官员采访；讲师被看见机制；每月沉淀 1 个会员 / 官员高光故事。</td>
+                <td class="owner">毛斐、金晶</td>
+                <td>每月</td>
+                <td><span class="status wait">待启动</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <div class="commitment-list" id="taskList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="data">
+      <div class="section-head">
+        <h2>运营数据记录</h2>
+        <div class="note">参会、嘉宾、转化先持续记录，指标后续再精炼</div>
+      </div>
+      <div class="section-body split">
+        <form id="recordForm">
+          <div class="input-grid">
+            <div class="field">
+              <label for="date">日期</label>
+              <input id="date" name="date" type="date" required>
+            </div>
+            <div class="field">
+              <label for="type">类型</label>
+              <select id="type" name="type">
+                <option value="常规例会">常规例会</option>
+                <option value="AI 工作坊">AI 工作坊</option>
+                <option value="官员会">官员会</option>
+                <option value="COT">COT</option>
+                <option value="出摊 / 外部活动">出摊 / 外部活动</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="total">总参会</label>
+              <input id="total" name="total" type="number" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="members">会员</label>
+              <input id="members" name="members" type="number" min="0" step="1">
+            </div>
+            <div class="field">
+              <label for="guests">嘉宾</label>
+              <input id="guests" name="guests" type="number" min="0" step="1">
+            </div>
+            <div class="field">
+              <label for="conversions">入会转化</label>
+              <input id="conversions" name="conversions" type="number" min="0" step="1">
+            </div>
+            <div class="field">
+              <label for="roles">角色填充</label>
+              <input id="roles" name="roles" type="number" min="0" step="1">
+            </div>
+            <div class="field">
+              <label for="ai">AI 环节</label>
+              <select id="ai" name="ai">
+                <option value="无">无</option>
+                <option value="有">有</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="notes">备注 / 复盘</label>
+              <textarea id="notes" name="notes" placeholder="例：主题、嘉宾反馈、来源渠道、会后跟进、下次改进点"></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit">保存记录</button>
+            <button type="button" id="resetForm" class="secondary">清空输入</button>
+            <button type="button" id="clearRecords" class="danger">清空本地记录</button>
+          </div>
+        </form>
+
+        <div>
+          <div class="chart" id="attendanceChart"></div>
+          <div class="table-scroll" id="recordsMount" style="margin-top: 12px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-head">
+        <h2>项目与问题跟进</h2>
+        <div class="note">吸收嘉骏表的“项目管理表 + 问题清单”逻辑</div>
+      </div>
+      <div class="section-body table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>类型</th>
+              <th>项目 / 问题</th>
+              <th>目标</th>
+              <th>主责人</th>
+              <th>下一步动作</th>
+              <th>日期</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status high">项目</span></td>
+              <td>会议经理排班</td>
+              <td>让每期例会有明确会议经理、主题、备稿与支持角色。</td>
+              <td class="owner">黎耀棠</td>
+              <td>补齐 7、8 月会议经理排班，建立 D-3 确认机制。</td>
+              <td>2026-07-15</td>
+              <td><span class="status wait">新增</span></td>
+            </tr>
+            <tr>
+              <td><span class="status high">项目</span></td>
+              <td>VPM 招新路径</td>
+              <td>把“俱乐部产品卖出去”，会员数走向 25。</td>
+              <td class="owner">毛斐</td>
+              <td>定义目标画像、不要的人、嘉宾话术、跟进 SOP。</td>
+              <td>2026-07-25</td>
+              <td><span class="status wait">待建</span></td>
+            </tr>
+            <tr>
+              <td><span class="status mid">项目</span></td>
+              <td>PR 闭环上手</td>
+              <td>金晶能独立完成海报、推文、取火、群发布、复盘。</td>
+              <td class="owner">金晶</td>
+              <td>先完成 2026-07-12 前首轮 PR 学习与渠道权限。</td>
+              <td>2026-07-12</td>
+              <td><span class="status doing">80%</span></td>
+            </tr>
+            <tr>
+              <td><span class="status mid">项目</span></td>
+              <td>官员采访</td>
+              <td>让官员团队被看见，也让会员知道官员在建设什么。</td>
+              <td class="owner">毛斐</td>
+              <td>出采访提纲、完成首版素材、排发布节奏。</td>
+              <td>2026-07-30</td>
+              <td><span class="status wait">待启动</span></td>
+            </tr>
+            <tr>
+              <td><span class="status low">项目</span></td>
+              <td>需求池小工具</td>
+              <td>收集会员 AI 选题，支撑后续 AI 工作坊。</td>
+              <td class="owner">魏真、彭宗一</td>
+              <td>先确认是否必要；低优先级，不抢 7 月主线。</td>
+              <td>2026-07-30</td>
+              <td><span class="status low">低优先</span></td>
+            </tr>
+            <tr>
+              <td><span class="status low">机制</span></td>
+              <td>讲师礼物 / 被看见</td>
+              <td>让讲师贡献被看见，增强参与与归属。</td>
+              <td class="owner">彭宗一、毛斐</td>
+              <td>月底前定一个轻量机制，先不重投入。</td>
+              <td>2026-07-30</td>
+              <td><span class="status low">低优先</span></td>
+            </tr>
+            <tr>
+              <td><span class="status blocked">问题</span></td>
+              <td>会员体系是否统一</td>
+              <td>减少管理复杂度，增强会员身份一致性。</td>
+              <td class="owner">毛斐</td>
+              <td>专项讨论；先不在 7 月主线纠缠。</td>
+              <td>待定</td>
+              <td><span class="status wait">未决策</span></td>
+            </tr>
+            <tr>
+              <td><span class="status blocked">问题</span></td>
+              <td>AI 提升如何量化</td>
+              <td>把 AI 真落地从口号变成可观察变化。</td>
+              <td class="owner">黎耀棠、毛斐</td>
+              <td>先记录案例、提示词、反馈，不急着定硬指标。</td>
+              <td>待定</td>
+              <td><span class="status wait">观察中</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="ritual">
+      <div class="section-head">
+        <h2>每月官员会运行节奏</h2>
+        <div class="note">让系统真的被使用，而不是做完就放着</div>
+      </div>
+      <div class="section-body">
+        <div class="principles">
+          <article class="principle">
+            <div class="idx">Before</div>
+            <h3>会前 2 天</h3>
+            <p>每位官员更新月度目标、关键动作、卡点；VPE 更新例会数据；VPM 更新嘉宾与转化。</p>
+          </article>
+          <article class="principle">
+            <div class="idx">Opening</div>
+            <h3>先看结果</h3>
+            <p>只看 6 个健康度指标：会员、活跃、参会、嘉宾、转化、待办完成。</p>
+          </article>
+          <article class="principle">
+            <div class="idx">Middle</div>
+            <h3>再看人</h3>
+            <p>每个官员说 3 件事：进展、卡点、下月动作。其他人只补支持，不审判。</p>
+          </article>
+          <article class="principle">
+            <div class="idx">Decision</div>
+            <h3>处理阻塞</h3>
+            <p>问题清单只处理影响主线的阻塞；低优先级事项不抢会议注意力。</p>
+          </article>
+          <article class="principle">
+            <div class="idx">After</div>
+            <h3>会后 24 小时</h3>
+            <p>复制周报发群；更新下一步动作。所有结论落成“谁在什么日期前做什么”。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>关联材料</h2>
+        <div class="note">原始依据与旧看板</div>
+      </div>
+      <div class="section-body links">
+        <a href="260704-新一届首次官员会议纪要｜方向对齐与成员目标.md">会议纪要 Markdown</a>
+        <a href="260704-新一届首次官员会议纪要｜方向对齐与成员目标-同步看板.html">会议同步看板</a>
+        <a href="毛斐-2026年7-8月目标拆解与领导力建议.html">毛斐个人目标页</a>
+        <a href="明源云战略屋-2026H2目标跟进.html">旧战略屋草稿</a>
+      </div>
+    </section>
+
+    <p class="footer">本地管理系统 v1。参会数据与待办勾选保存在当前浏览器 localStorage，可复制周报同步到官员群。</p>
+  </main>
+
+  <div class="toast" id="toast">已复制</div>
+
+  <script>
+    const STORAGE_KEY = 'mingyuan-2026h2-operating-system-v1';
+    const TASK_KEY = 'mingyuan-2026h2-operating-system-v1-tasks';
+    const MEMBER_BASELINE = 8;
+    const MEMBER_TARGET = 25;
+    const ATTENDANCE_TARGET = 20;
+
+    const defaultTasks = [
+      { id: 'cot', title: 'COT 一起参与', owner: '毛斐、黎耀棠、彭宗一、魏真', date: '2026-07-12', priority: '高', status: '待参与', done: false },
+      { id: 'bill', title: '给宗一上半年账单 + 现有资金明细', owner: '毛斐', date: '2026-07-12', priority: '高', status: '已完成', done: true },
+      { id: 'pr-study', title: '金晶 PR 学习：AI 海报、推文、取火 + 头马群发布', owner: '金晶', date: '2026-07-12', priority: '高', status: '80%', done: false },
+      { id: 'monthly-goals', title: '全体官员拆 7、8 月目标', owner: '全体官员', date: '2026-07-15', priority: '高', status: '待完成', done: false },
+      { id: 'tm-schedule', title: '补齐会议经理排班', owner: '黎耀棠', date: '2026-07-15', priority: '高', status: '新增', done: false },
+      { id: 'agenda-plan', title: '半年例会 / 工作坊规划', owner: '黎耀棠', date: '2026-07-09', priority: '高', status: '已完成', done: true },
+      { id: 'monthly-officer-meeting', title: '固定每月一次官员会', owner: '全体官员', date: '2026-07-31', priority: '高', status: '持续', done: false },
+      { id: 'pull-jj-group', title: '把金晶拉进可发广告的头马微信群', owner: '黎耀棠、毛斐', date: '2026-07-12', priority: '中', status: '待完成', done: false },
+      { id: 'source-tracking', title: '投票问卷加来源渠道 / 为什么来埋点', owner: '金晶、彭宗一', date: '2026-07-12', priority: '中', status: '待完成', done: false },
+      { id: 'quhuo', title: '取火每期稳定发', owner: '金晶', date: '2026-07-12', priority: '中', status: '持续', done: false },
+      { id: 'alipay-pot', title: '搭建支付宝小荷包财务管理 + 开支付权限', owner: '彭宗一', date: '2026-07-09', priority: '中', status: '已完成', done: true },
+      { id: 'sales-learning', title: '销售表达研学 / VPM 训练营', owner: '彭宗一', date: '2026-07-30', priority: '中', status: '待确认', done: false },
+      { id: 'officer-interview', title: '官员采访 + 目标推文宣传', owner: '毛斐', date: '2026-07-30', priority: '中', status: '待完成', done: false },
+      { id: 'needs-tool', title: '需求池小工具', owner: '魏真、彭宗一', date: '2026-07-30', priority: '低', status: '待认领', done: false },
+      { id: 'speaker-gift', title: '讲师礼物 / 被看见机制', owner: '彭宗一、毛斐', date: '2026-07-30', priority: '低', status: '待确认', done: false },
+    ];
+
+    const form = document.getElementById('recordForm');
+    const toast = document.getElementById('toast');
+    const taskList = document.getElementById('taskList');
+    const chart = document.getElementById('attendanceChart');
+    const recordsMount = document.getElementById('recordsMount');
+
+    function showToast(text = '已复制') {
+      toast.textContent = text;
+      toast.classList.add('show');
+      window.setTimeout(() => toast.classList.remove('show'), 1400);
+    }
+
+    function toNumber(value) {
+      const number = Number(value);
+      return Number.isFinite(number) ? number : 0;
+    }
+
+    function loadRecords() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveRecords(records) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    }
+
+    function loadTasks() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(TASK_KEY) || '{}');
+        return defaultTasks.map((task) => ({ ...task, done: saved[task.id] ?? task.done }));
+      } catch (error) {
+        return defaultTasks;
+      }
+    }
+
+    function saveTasks(tasks) {
+      const payload = {};
+      tasks.forEach((task) => { payload[task.id] = task.done; });
+      localStorage.setItem(TASK_KEY, JSON.stringify(payload));
+    }
+
+    function sorted(records) {
+      return [...records].sort((a, b) => b.date.localeCompare(a.date));
+    }
+
+    function summarize(records) {
+      const regular = records.filter((item) => item.type !== '官员会' && item.type !== 'COT');
+      const base = regular.length ? regular : records;
+      const attendance = base.reduce((sum, item) => sum + toNumber(item.total), 0);
+      const avg = base.length ? Math.round((attendance / base.length) * 10) / 10 : 0;
+      const guests = records.reduce((sum, item) => sum + toNumber(item.guests), 0);
+      const conversions = records.reduce((sum, item) => sum + toNumber(item.conversions), 0);
+      return { avg, guests, conversions, memberNow: MEMBER_BASELINE + conversions };
+    }
+
+    function renderMetrics() {
+      const records = loadRecords();
+      const tasks = loadTasks();
+      const summary = summarize(records);
+      const doneCount = tasks.filter((task) => task.done).length;
+      document.getElementById('memberNow').textContent = summary.memberNow;
+      document.getElementById('avgAttendance').textContent = summary.avg;
+      document.getElementById('guestTotal').textContent = summary.guests;
+      document.getElementById('conversionTotal').textContent = summary.conversions;
+      document.getElementById('doneTasks').textContent = `${doneCount}/${tasks.length}`;
+    }
+
+    function taskStatusClass(task) {
+      if (task.done) return 'done';
+      if (task.priority === '高') return 'high';
+      if (task.priority === '中') return 'mid';
+      return 'low';
+    }
+
+    function renderTasks() {
+      const tasks = loadTasks();
+      taskList.innerHTML = tasks.map((task) => `
+        <label class="commitment">
+          <input type="checkbox" data-task="${task.id}" ${task.done ? 'checked' : ''}>
+          <span>
+            <span class="title">${task.title}</span>
+            <span class="meta">${task.owner} · ${task.date}</span>
+          </span>
+          <span class="status ${taskStatusClass(task)}">${task.priority}</span>
+          <span class="status ${task.done ? 'done' : 'wait'}">${task.done ? '已完成' : task.status}</span>
+        </label>
+      `).join('');
+      renderMetrics();
+    }
+
+    function renderChart() {
+      const records = [...loadRecords()].sort((a, b) => a.date.localeCompare(b.date)).slice(-10);
+      chart.innerHTML = '';
+      if (!records.length) {
+        chart.innerHTML = '<div class="empty">还没有参会数据。每场会后记录一次，趋势会自动生成。</div>';
+        return;
+      }
+      const max = Math.max(ATTENDANCE_TARGET, ...records.map((item) => toNumber(item.total)));
+      records.forEach((item) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'bar-wrap';
+        const num = document.createElement('div');
+        num.className = 'bar-num';
+        num.textContent = item.total;
+        const bar = document.createElement('div');
+        bar.className = `bar ${toNumber(item.total) >= ATTENDANCE_TARGET ? 'hit' : ''}`;
+        bar.style.height = `${Math.max(3, (toNumber(item.total) / max) * 124)}px`;
+        const label = document.createElement('div');
+        label.className = 'bar-label';
+        label.textContent = item.date.slice(5);
+        wrap.title = `${item.date} ${item.type}: ${item.total} 人`;
+        wrap.append(num, bar, label);
+        chart.appendChild(wrap);
+      });
+    }
+
+    function renderRecords() {
+      const records = sorted(loadRecords());
+      if (!records.length) {
+        recordsMount.innerHTML = '<div class="empty">暂无历史记录。数据保存在当前浏览器本地。</div>';
+        return;
+      }
+      recordsMount.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>类型</th>
+              <th>总参会</th>
+              <th>会员</th>
+              <th>嘉宾</th>
+              <th>转化</th>
+              <th>AI</th>
+              <th>备注</th>
+              <th class="no-print">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${records.map((item) => `
+              <tr>
+                <td>${item.date}</td>
+                <td>${item.type}</td>
+                <td>${item.total}</td>
+                <td>${item.members || 0}</td>
+                <td>${item.guests || 0}</td>
+                <td>${item.conversions || 0}</td>
+                <td>${item.ai}</td>
+                <td>${item.notes || ''}</td>
+                <td class="no-print"><button type="button" class="danger" data-delete="${item.id}">删除</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderAll() {
+      renderTasks();
+      renderChart();
+      renderRecords();
+      renderMetrics();
+    }
+
+    function recordsToTsv() {
+      const header = ['日期', '类型', '总参会', '会员', '嘉宾', '入会转化', '角色填充', 'AI环节', '备注'];
+      const rows = sorted(loadRecords()).map((item) => [
+        item.date,
+        item.type,
+        item.total,
+        item.members || 0,
+        item.guests || 0,
+        item.conversions || 0,
+        item.roles || 0,
+        item.ai,
+        item.notes || '',
+      ]);
+      return [header, ...rows].map((row) => row.join('\t')).join('\n');
+    }
+
+    function tasksToTsv() {
+      const header = ['任务', '责任人', '日期', '优先级', '状态', '完成'];
+      const rows = loadTasks().map((task) => [task.title, task.owner, task.date, task.priority, task.status, task.done ? '是' : '否']);
+      return [header, ...rows].map((row) => row.join('\t')).join('\n');
+    }
+
+    function weeklyReport() {
+      const records = loadRecords();
+      const tasks = loadTasks();
+      const summary = summarize(records);
+      const doneCount = tasks.filter((task) => task.done).length;
+      const latest = sorted(records)[0];
+      const latestLine = latest
+        ? `最近一场：${latest.date} ${latest.type}，总参会 ${latest.total} 人，会员 ${latest.members || 0} 人，嘉宾 ${latest.guests || 0} 人，转化 ${latest.conversions || 0} 人。`
+        : '最近一场：暂无记录。';
+      const highOpen = tasks.filter((task) => !task.done && task.priority === '高').map((task) => `- ${task.title}（${task.owner}，${task.date}）`).join('\n') || '- 暂无';
+      return [
+        '明源云 2026 H2 战略屋周报',
+        '',
+        `当前会员：${summary.memberNow} / ${MEMBER_TARGET}`,
+        `平均参会：${summary.avg} / ${ATTENDANCE_TARGET}`,
+        `累计嘉宾：${summary.guests}`,
+        `入会转化：${summary.conversions}`,
+        `待办完成：${doneCount} / ${tasks.length}`,
+        latestLine,
+        '',
+        '本周高优先级未完成：',
+        highOpen,
+        '',
+        '下次官员会重点看：',
+        '1. 每位官员 7、8 月目标是否已经拆出来。',
+        '2. 会议经理排班和 D-3 确认机制是否补齐。',
+        '3. 嘉宾来源、会后承接、入会转化是否开始记录。',
+      ].join('\n');
+    }
+
+    async function copyText(text, toastText) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (error) {
+        const area = document.createElement('textarea');
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+      }
+      showToast(toastText);
+    }
+
+    taskList.addEventListener('change', (event) => {
+      const input = event.target.closest('[data-task]');
+      if (!input) return;
+      const tasks = loadTasks();
+      const task = tasks.find((item) => item.id === input.dataset.task);
+      if (task) task.done = input.checked;
+      saveTasks(tasks);
+      renderTasks();
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const record = {
+        id: String(Date.now()),
+        date: data.get('date'),
+        type: data.get('type'),
+        total: toNumber(data.get('total')),
+        members: toNumber(data.get('members')),
+        guests: toNumber(data.get('guests')),
+        conversions: toNumber(data.get('conversions')),
+        roles: toNumber(data.get('roles')),
+        ai: data.get('ai'),
+        notes: String(data.get('notes') || '').trim(),
+      };
+      const records = loadRecords();
+      records.push(record);
+      saveRecords(records);
+      form.reset();
+      document.getElementById('date').valueAsDate = new Date();
+      renderAll();
+      showToast('已保存');
+    });
+
+    recordsMount.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-delete]');
+      if (!button) return;
+      const records = loadRecords().filter((item) => item.id !== button.dataset.delete);
+      saveRecords(records);
+      renderAll();
+      showToast('已删除');
+    });
+
+    document.getElementById('copyWeekly').addEventListener('click', () => copyText(weeklyReport(), '已复制周报'));
+    document.getElementById('copyTasks').addEventListener('click', () => copyText(tasksToTsv(), '已复制待办 TSV'));
+    document.getElementById('copyRecords').addEventListener('click', () => copyText(recordsToTsv(), '已复制数据 TSV'));
+    document.getElementById('exportState').addEventListener('click', () => {
+      copyText(JSON.stringify({ records: loadRecords(), tasks: loadTasks() }, null, 2), '已复制本地数据');
+    });
+    document.getElementById('resetForm').addEventListener('click', () => {
+      form.reset();
+      document.getElementById('date').valueAsDate = new Date();
+    });
+    document.getElementById('clearRecords').addEventListener('click', () => {
+      if (!window.confirm('确认清空本地运营数据？待办勾选不会被清空。')) return;
+      saveRecords([]);
+      renderAll();
+      showToast('已清空');
+    });
+
+    document.getElementById('date').valueAsDate = new Date();
+    renderAll();
+  </script>
+</body>
+</html>
